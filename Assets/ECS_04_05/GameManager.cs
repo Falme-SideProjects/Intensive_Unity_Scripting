@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Jobs;
+using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
 
@@ -39,7 +43,44 @@ namespace ECS_04{
 
 		}
 
-		TransformAccessArray transforms;
+		EntityManager manager;
+
+		void Start()
+		{
+			manager = World.Active.GetOrCreateManager<EntityManager>();
+			AddShips(enemyShipCount);		
+		}
+
+		void Update () {
+			if(Input.GetKeyDown("space")){
+				AddShips(enemyShipIncrement);
+			}
+		}
+
+		void AddShips(int amount){
+			NativeArray<Entity> entities = new NativeArray<Entity>(amount, Allocator.Temp);
+			manager.Instantiate(enemyShipPrefab, entities);
+
+			for(int i=0; i<amount; i++)
+			{
+				float xVal = Random.Range(leftBound, rightBound);
+				float zVal = Random.Range(0f,10f);
+				manager.SetComponentData(entities[i], new Position { Value = new float3(xVal, 0f, topBound + zVal) });
+				manager.SetComponentData(entities[i], new Rotation { Value = new quaternion(0,1,0,0) });
+				manager.SetComponentData(entities[i], new MoveSpeed { Value = enemySpeed });
+
+			}
+			entities.Dispose();
+
+			count += amount;
+
+
+		}
+
+
+
+		/* -------- EXAMPLE 2 -----------
+		 TransformAccessArray transforms;
 		MovementJob moveJob;
 		JobHandle moveHandle;
 
@@ -96,10 +137,9 @@ namespace ECS_04{
 				transforms.Add(obj.transform);
 			}
 			count += amount; 
-			/* 
-			*/
+			
 			//fps.SetElementCount(count);
-		}
+		} */
 
 
 		/* --------- EXAMPLE 1 --------------

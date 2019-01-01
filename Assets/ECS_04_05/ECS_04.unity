@@ -272,9 +272,9 @@ MonoBehaviour:
   bottomBound: -13.5
   leftBound: -23.5
   rightBound: 23.5
-  enemyShipPrefab: {fileID: 1854240465519782, guid: 018cf4d84a2141742994297f5083bbb3,
+  enemyShipPrefab: {fileID: 1460404129197640, guid: 2887d2c8bbd326d4590d88662358d311,
     type: 2}
   enemySpeed: 1
-  enemyShipCount: 1
+  enemyShipCount: 100
   enemyShipIncrement: 49
   count: 0
